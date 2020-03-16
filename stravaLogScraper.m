@@ -1,12 +1,19 @@
 clear
 
-activitiesFile='C:\Users\Admin\Documents\MATLAB\StravaAnalysis\activities.csv';
+activitiesFile='C:\Users\Admin\Documents\MATLAB\StravaLogScraper\activities.csv';
 
-opts = detectImportOptions(activitiesFile);
-opts.LineEnding='\r\n';
+opts = detectImportOptions(activitiesFile,...
+    'Delimiter',',',...
+    'LineEnding','\r\n',...
+    'VariableNamesLine',1);
+
 M=readtable(activitiesFile, opts);
 
-dateTimeFormat='dd MMM yyyy, HH:mm:ss';
+if M.ActivityDate{end}(end)=='M'
+    dateTimeFormat='MMM dd, yyyy, hh:mm:ss a';
+else
+    dateTimeFormat='dd MMM yyyy, HH:mm:ss';
+end
 
 allActivityTypes=unique(M.ActivityType);
 isCycling=strcmp(M.ActivityType,'Ride') | strcmp(M.ActivityType,'VirtualRide');
